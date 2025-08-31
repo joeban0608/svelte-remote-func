@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, integer, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
@@ -14,6 +14,20 @@ export const session = pgTable('session', {
 		.references(() => user.id),
 	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
 });
+
+export const todo = pgTable('todo', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	title: text('title').notNull(),
+	description: text('description'),
+	is_completed: boolean('is_completed').notNull().default(false),
+	createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow()
+});
+
+export type Todo = typeof todo.$inferSelect;
 
 export type Session = typeof session.$inferSelect;
 

@@ -5,6 +5,7 @@ import { paraglideMiddleware } from '$lib/paraglide/server';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import { db } from '$lib/server/db';
 import path from 'path';
+import type { HandleValidationError } from '@sveltejs/kit';
 
 const handleParaglide: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ request, locale }) => {
@@ -63,3 +64,14 @@ function error(): HandleServerError {
 export const handle: Handle = sequence(handleParaglide, handleAuth);
 export const init: ServerInit = _init();
 export const handleError: HandleServerError = error();
+
+export const handleValidationError: HandleValidationError = ({ event, issues }) => {
+	console.error('Validation error occurred:', {
+		issues,
+		event
+	});
+
+	return {
+		message: 'Nice try, hacker!'
+	};
+};

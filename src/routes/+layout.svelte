@@ -5,9 +5,6 @@
 	import Header from '$lib/component/Header.svelte';
 
 	let { children, data } = $props();
-	$effect(() => {
-		console.log('layout data', data.isLogin);
-	});
 </script>
 
 <svelte:body
@@ -26,5 +23,5 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header isLogin={data.isLogin} />
+<Header />
 {@render children?.()}
